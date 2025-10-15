@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from database import get_db
-from models import Task, User
-from schemas import TaskCreate, TaskUpdate
-from auth.jwt_handler import verify_token
+from app.database import get_db
+from app.models import Task, User
+from app.schemas import TaskCreate, TaskUpdate
+from app.auth.jwt_handler import verify_token
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
