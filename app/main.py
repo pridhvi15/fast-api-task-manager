@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from database import Base, engine
-from auth import routes_auth
-from users.routes_user import router as user_router
-from tasks import routes_tasks
+from app.database import Base, engine
+from app.auth import routes_auth
+from app.users.routes_user import router as user_router
+from app.tasks import routes_tasks
 
 Base.metadata.create_all(bind=engine)
 
