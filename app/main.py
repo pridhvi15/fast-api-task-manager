@@ -12,12 +12,12 @@ app = FastAPI(title="Task Manager API with JWT")
 # === CORS middleware ===
 origins = [
     "http://localhost:5173",          # React dev server
-    "http://127.0.0.1:5173"   # Add your production frontend here
+    "http://127.0.0.1:5173"   
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # Allow these origins
+    allow_origins=["*"],      # Allow these origins
     allow_credentials=True,
     allow_methods=["*"],        # Allow GET, POST, PUT, DELETE, etc.
     allow_headers=["*"],        # Allow custom headers
