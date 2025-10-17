@@ -12,13 +12,12 @@ app = FastAPI(title="Task Manager API with JWT")
 # === CORS middleware ===
 origins = [
     "http://localhost:5173",          # React dev server
-    "http://127.0.0.1:5173",
-    "https://fast-api-task-manager-on085mepk-pridhvi15s-projects.vercel.app"   
+    "http://127.0.0.1:5173"  
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # Allow these origins
+    allow_origin_regex=r"https://.*\.vercel\.app",      # Allow these origins
     allow_credentials=True,
     allow_methods=["*"],        # Allow GET, POST, PUT, DELETE, etc.
     allow_headers=["*"],        # Allow custom headers
