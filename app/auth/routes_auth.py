@@ -51,7 +51,15 @@ def refresh_token(token: str):
         raise HTTPException(status_code=401, detail="Invalid refresh token")
     
     username = payload.get("sub")
-    new_access_token = create_access_token({"sub": username})
+    user = db.query(User).filter(User.username == username).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+
+    new_access_token = create_access_token({
+        "sub": username,
+        "is_admin": user.is_admin
+    })
+
     return {"access_token": new_access_token, "token_type": "bearer"}
 
 
