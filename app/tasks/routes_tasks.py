@@ -89,7 +89,6 @@ def list_tasks(current_user: User = Depends(get_current_user), db: Session = Dep
     return tasks
 
 
-# Admin or Assigned User: Update task status
 @router.put("/{task_id}", status_code=status.HTTP_200_OK)
 def update_task(
     task_id: int,
@@ -101,13 +100,45 @@ def update_task(
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
 
-    if task.assigned_to != current_user.id and not current_user.is_admin:
+    # === Access control ===
+    if not current_user.is_admin and task.assigned_to != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this task")
 
-    task.status = update.status
+    # === Admin can update everything ===
+    if current_user.is_admin:
+        if update.title is not None:
+            task.title = update.title
+        if update.description is not None:
+            task.description = update.description
+        if update.priority is not None:
+            task.priority = update.priority
+        if update.status is not None:
+            task.status = update.status
+        if update.assigned_to is not None:
+            task.assigned_to = update.assigned_to
+
+    # === Non-admin can only update status ===
+    else:
+        if update.status:
+            task.status = update.status
+        else:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Employees can only update task status")
+
     db.commit()
     db.refresh(task)
-    return {"msg": "Task updated successfully", "task": task}
+
+    return {
+        "msg": "Task updated successfully",
+        "task": {
+            "id": task.id,
+            "title": task.title,
+            "description": task.description,
+            "priority": task.priority,
+            "status": task.status,
+            "assigned_to": task.assigned_to,
+        },
+    }
+
 
 
 # Admin-only: Delete task
