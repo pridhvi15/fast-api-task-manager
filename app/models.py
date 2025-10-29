@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from app.database import Base
 from datetime import datetime
-from sqlalchemy import String
 
 class User(Base):
     __tablename__ = "users"
@@ -25,8 +24,9 @@ class Task(Base):
     description = Column(String)
     assigned_to = Column(Integer, ForeignKey("users.id"))
     created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
-    status = Column(String, default="Pending")
+    status = Column(String, default="Pending")       # Status describes progress (e.g., In progress, Completed)
     priority = Column(String, default="Medium")
+    acceptance_status = Column(String, default="Pending")  # "Pending", "Accepted", or "Rejected"
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
