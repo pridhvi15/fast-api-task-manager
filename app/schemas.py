@@ -24,7 +24,7 @@ class TaskCreate(BaseModel):
 class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
-    priority: Optional[str] = None
+    priority: Optional[Literal["High", "Medium", "Low"]] = None
     status: Optional[str] = None
     assigned_to: Optional[int] = None
 
